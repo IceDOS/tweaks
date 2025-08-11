@@ -6,6 +6,8 @@
     [
       {
         boot = {
+          kernelModules = [ "ntsync" ];
+
           kernelParams = [
             "clearcpuid=514" # Disables UMIP which fixes certain games from crashing on launch
           ];

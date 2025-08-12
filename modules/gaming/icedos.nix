@@ -17,6 +17,22 @@
             "vm.max_map_count" = 1048576; # Fixes crashes or start-up issues for games
           };
         };
+
+        security.pam.loginLimits = [
+          {
+            domain = "*";
+            type = "hard";
+            item = "memlock";
+            value = "2147483648";
+          }
+
+          {
+            domain = "*";
+            type = "soft";
+            item = "memlock";
+            value = "2147483648";
+          }
+        ];
       }
     ];
 

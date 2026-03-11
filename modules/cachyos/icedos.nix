@@ -1,21 +1,31 @@
 { icedosLib, lib, ... }:
 
 {
-  options.icedos.tweaks.cachyos.useAdios =
+  options.icedos.tweaks.cachyos =
     let
       inherit (icedosLib) mkBoolOption;
       inherit (lib) readFile;
-      inherit ((fromTOML (readFile ./config.toml)).icedos.tweaks.cachyos) useAdios;
+      inherit ((fromTOML (readFile ./config.toml)).icedos.tweaks.cachyos) useAdios useCachyosZramProfile;
     in
-    mkBoolOption { default = useAdios; };
+    {
+      useCachyosZramProfile = mkBoolOption { default = useCachyosZramProfile; };
+      useAdios = mkBoolOption { default = useAdios; };
+    };
 
   outputs.nixosModules =
     { ... }:
     [
       (
-        { config, pkgs, ... }:
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
+
         let
-          inherit (config.icedos.tweaks.cachyos) useAdios;
+          inherit (config.icedos.tweaks.cachyos) useAdios useCachyosZramProfile;
+          inherit (lib) mkIf;
         in
         {
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/70-cachyos-settings.conf
@@ -32,12 +42,33 @@
             "vm.vfs_cache_pressure" = 50;
           };
 
+          services.zram-generator = mkIf useCachyosZramProfile {
+            enable = true;
+
+            settings.zram0 = {
+              compression-algorithm = "zstd";
+              zram-size = "ram";
+              swap-priority = "100";
+              fs-type = "swap";
+            };
+          };
+
           services.udev.extraRules =
             let
               # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/99-cpu-dma-latency.rules
               cpuDmaLatencyRule = ''
                 DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
               '';
+
+              # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/30-zram.rules
+              zramProfile =
+                if useCachyosZramProfile then
+                  ''
+                    ACTION=="change", KERNEL=="zram0", ATTR{initstate}=="1", SYSCTL{vm.swappiness}="150", \
+                        RUN+="/bin/sh -c 'echo N > /sys/module/zswap/parameters/enabled'"
+                  ''
+                else
+                  "";
 
               # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/69-hdparm.rules
               hddRule = ''
@@ -75,6 +106,7 @@
             in
             ''
               ${cpuDmaLatencyRule}
+              ${zramProfile}
               ${hddRule}
               ${hpetRule}
               ${ioRule}

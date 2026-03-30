@@ -28,7 +28,7 @@
           inherit (lib) mkIf;
         in
         {
-          boot.kernelParams = [ "nowatchdog" ];
+          boot.kernelParams = [ "nowatchdog" "zswap.enabled=0" ];
 
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/70-cachyos-settings.conf
           boot.kernel.sysctl = {

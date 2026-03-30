@@ -8,7 +8,8 @@
         { config, lib, ... }:
 
         let
-          inherit (config.icedos) tweaks;
+          inherit (config) icedos;
+          inherit (icedos) tweaks;
           inherit (lib) hasAttr;
         in
         {
@@ -19,7 +20,10 @@
 
             kernel.sysctl = {
               "vm.page_cluster" =
-                if (hasAttr "cachyos" tweaks && tweaks.cachyos.useCachyosZramProfile) then 0 else 1;
+                if (hasAttr "tweaks" icedos && hasAttr "cachyos" tweaks && tweaks.cachyos.useCachyosZramProfile) then
+                  0
+                else
+                  1;
 
               "vm.compaction_proactiveness" = 0;
               "vm.page_lock_unfairness" = 1;

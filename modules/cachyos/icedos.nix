@@ -28,6 +28,8 @@
           inherit (lib) mkIf;
         in
         {
+          boot.kernelParams = [ "nowatchdog" ];
+
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/70-cachyos-settings.conf
           boot.kernel.sysctl = {
             "fs.file-max" = 2097152;
@@ -123,6 +125,8 @@
             enable = true;
             rulesProvider = pkgs.ananicy-rules-cachyos;
           };
+
+          services.irqbalance.enable = true;
 
           systemd.settings.Manager = {
             DefaultTimeoutStartSec = "15s";

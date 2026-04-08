@@ -102,7 +102,7 @@
               # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/50-sata.rules
               sataRule = ''
                 ACTION=="add", SUBSYSTEM=="scsi_host", KERNEL=="host*", \
-                  ATTR{link_power_management_policy}=="*", \
+                  ATTR{link_power_management_supported}=="1", \
                   ATTR{link_power_management_policy}="max_performance"
               '';
             in

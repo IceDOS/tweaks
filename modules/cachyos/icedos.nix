@@ -28,7 +28,10 @@
           inherit (lib) mkIf;
         in
         {
-          boot.kernelParams = [ "nowatchdog" "zswap.enabled=0" ];
+          boot.kernelParams = [
+            "nowatchdog"
+            "zswap.enabled=0"
+          ];
 
           # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/sysctl.d/70-cachyos-settings.conf
           boot.kernel.sysctl = {
@@ -96,7 +99,7 @@
 
                 # NVMe SSD
                 ACTION=="add|change", KERNEL=="nvme[0-9]*", ATTR{queue/rotational}=="0", \
-                    ATTR{queue/scheduler}="${if useAdios then "adios" else "none"}"
+                    ATTR{queue/scheduler}="${if useAdios then "adios" else "kyber"}"
               '';
 
               # https://github.com/CachyOS/CachyOS-Settings/blob/master/usr/lib/udev/rules.d/50-sata.rules

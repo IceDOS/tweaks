@@ -13,8 +13,7 @@
           inherit (icedos) tweaks;
           inherit (lib) hasAttr versionAtLeast;
 
-          pageClusterKey =
-            if versionAtLeast version "6.19" then "vm.page-cluster" else "vm.page_cluster";
+          pageClusterKey = if versionAtLeast version "6.19" then "vm.page-cluster" else "vm.page_cluster";
         in
         {
           boot = {
@@ -24,7 +23,9 @@
 
             kernel.sysctl = {
               ${pageClusterKey} =
-                if (hasAttr "tweaks" icedos && hasAttr "cachyos" tweaks && tweaks.cachyos.useCachyosZramProfile) then
+                if
+                  (hasAttr "tweaks" icedos && hasAttr "cachyos" tweaks && tweaks.cachyos.useCachyosZramProfile)
+                then
                   0
                 else
                   1;

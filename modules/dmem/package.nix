@@ -5,7 +5,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "dmemcg-booster";
   version = "0.1.2";
 

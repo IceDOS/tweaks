@@ -5,14 +5,18 @@
   rustPlatform,
 }:
 
+let
+  # Pin refreshed by ./update.sh, which tracks main's HEAD (upstream never tags) and
+  # copies the matching Cargo.lock in beside this file.
+  source = builtins.fromJSON (builtins.readFile ./source.json);
+in
 rustPlatform.buildRustPackage {
   pname = "dmemcg-booster";
-  version = "0.1.2";
+  inherit (source) version;
 
   src = fetchgit {
     url = "https://gitlab.steamos.cloud/holo/dmemcg-booster.git";
-    rev = "79de901c077fedf2b3be53b460e4be8c16eaf020";
-    hash = "sha256-qETBTccMJmB5IJPBK1sLTUdtpPfLFMKFwewLqpB/PgM=";
+    inherit (source) rev hash;
   };
 
   cargoLock.lockFile = ./Cargo.lock;

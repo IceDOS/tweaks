@@ -4,8 +4,8 @@
   options.icedos.tweaks.cachyos =
     let
       inherit (icedosLib) mkBoolOption;
-      inherit (lib) readFile;
-      inherit ((fromTOML (readFile ./config.toml)).icedos.tweaks.cachyos) useAdios useCachyosZramProfile;
+      inherit (lib) importTOML;
+      inherit ((importTOML ./config.toml).icedos.tweaks.cachyos) useAdios useCachyosZramProfile;
     in
     {
       useCachyosZramProfile = mkBoolOption { default = useCachyosZramProfile; };

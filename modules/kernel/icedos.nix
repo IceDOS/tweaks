@@ -1,8 +1,8 @@
-{ ... }:
+{ icedosLib, ... }:
 
 {
   outputs.nixosModules =
-    { ... }:
+    { repoUrl, ... }:
     [
       (
         { config, lib, ... }:
@@ -10,8 +10,14 @@
         let
           inherit (config) boot icedos;
           inherit (boot.kernelPackages.kernel) version;
-          inherit (icedos) tweaks;
-          inherit (lib) hasAttr versionAtLeast;
+          inherit (lib) versionAtLeast;
+
+          useCachyosZramProfile =
+            icedosLib.hasModule {
+              inherit config repoUrl;
+              name = "cachyos";
+            }
+            && (icedos.tweaks.cachyos.useCachyosZramProfile or false);
 
           pageClusterKey = if versionAtLeast version "6.19" then "vm.page-cluster" else "vm.page_cluster";
         in
@@ -22,20 +28,13 @@
             ];
 
             kernel.sysctl = {
-              ${pageClusterKey} =
-                if
-                  (hasAttr "tweaks" icedos && hasAttr "cachyos" tweaks && tweaks.cachyos.useCachyosZramProfile)
-                then
-                  0
-                else
-                  1;
+              ${pageClusterKey} = if useCachyosZramProfile then 0 else 1;
 
               "vm.compaction_proactiveness" = 0;
               "vm.page_lock_unfairness" = 1;
             };
           };
 
-          # More sysctl params to set
           system.activationScripts.sysfs.text = ''
             echo advise > /sys/kernel/mm/transparent_hugepage/shmem_enabled
             echo 0 > /sys/kernel/mm/transparent_hugepage/khugepaged/defrag

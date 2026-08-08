@@ -36,7 +36,6 @@
             }
           ];
 
-          # Udev rules to make supported controllers available with user-grade permissions
           services.udev.packages = with pkgs; [ game-devices-udev-rules ];
         }
       )

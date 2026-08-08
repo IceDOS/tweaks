@@ -54,9 +54,7 @@ main() {
   require_nonempty "dmem (Cargo.toml version)" "$crate_version"
   version="$crate_version-unstable-$date"
 
-  # buildRustPackage consumes the vendored lockfile (package.nix symlinks it over the
-  # checkout's), so it has to move with the revision or the build fails on a stale
-  # dependency graph.
+  # Vendored lockfile must move with the revision or build fails on stale deps.
   [ -f "$path/Cargo.lock" ] || error "upstream checkout has no Cargo.lock to vendor"
   install -m644 "$path/Cargo.lock" "$LOCK"
   info "  Vendored Cargo.lock refreshed"

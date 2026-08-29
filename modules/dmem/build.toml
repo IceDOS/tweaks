@@ -1,0 +1,7 @@
+[[icedos.repositories]]
+url = "github:icedos/tweaks"
+fetchDependencies = false
+modules = ["dmem"]
+
+[icedos.system]
+version = "26.05"

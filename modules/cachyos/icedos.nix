@@ -118,7 +118,7 @@
               ${sataRule}
             '';
 
-          services.journald.extraConfig = "SystemMaxUse=50M";
+          services.journald.settings.Journal.extraConfig = "SystemMaxUse=50M";
 
           system.activationScripts.sysfs.text = ''
             echo 409 > /sys/kernel/mm/transparent_hugepage/khugepaged/max_ptes_none

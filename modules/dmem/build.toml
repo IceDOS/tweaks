@@ -1,6 +1,6 @@
 [[icedos.repositories]]
 url = "github:icedos/tweaks"
-fetchDependencies = false
+fetchDependencies = true
 modules = ["dmem"]
 
 [icedos.system]

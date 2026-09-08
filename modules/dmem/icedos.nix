@@ -2,7 +2,7 @@
 
 {
   outputs.nixosModules =
-    { ... }:
+    { inputs, ... }:
     [
       (
         {
@@ -17,7 +17,7 @@
           inherit (lib) mkIf versionAtLeast;
 
           dmemSupported = versionAtLeast version "7.0";
-          dmemcg-booster = pkgs.callPackage ./package.nix { };
+          dmemcg-booster = (pkgs.extend inputs.jovian.overlays.default).dmemcg-booster;
         in
         mkIf dmemSupported {
           environment.systemPackages = [ dmemcg-booster ];
@@ -41,5 +41,13 @@
       )
     ];
 
-  meta.name = "dmem";
+  meta = {
+    name = "dmem";
+    dependencies = [
+      {
+        url = "github:icedos/providers";
+        modules = [ "jovian" ];
+      }
+    ];
+  };
 }

@@ -25,7 +25,7 @@
 
         let
           inherit (config.icedos.tweaks.cachyos) useAdios useCachyosZramProfile;
-          inherit (lib) mkIf;
+          inherit (lib) mkIf optionals;
         in
         {
           boot.kernelParams = [
@@ -137,6 +137,20 @@
             DefaultTimeoutStopSec = "10s";
             DefaultLimitNOFILE = "2048:2097152";
           };
+
+          icedos.system.tips.list = [
+            "Your system runs CachyOS tuning, so everyday use feels quicker."
+            "The app you are using gets priority over background jobs, so it stays smooth."
+            "Drives and disk links are set for speed instead of power saving."
+            "Boot and shutdown wait less on slow services before moving on."
+          ]
+          ++ optionals useCachyosZramProfile [
+            "Spare memory is compressed instead of written to disk, so your PC stays fast when RAM fills up."
+            "Turn compressed memory off with [icedos.tweaks.cachyos] useCachyosZramProfile = false in config.toml."
+          ]
+          ++ optionals useAdios [
+            "Your drives learn how long they actually take and order work to match, so the system stays responsive while the disk is busy."
+          ];
         }
       )
     ];

@@ -37,6 +37,13 @@
           ];
 
           services.udev.packages = with pkgs; [ game-devices-udev-rules ];
+
+          icedos.system.tips.list = [
+            "Game controllers, wheels and flight sticks work as soon as you plug them in."
+            "Windows games run through Proton with less overhead here."
+            "Games can use far more memory before the system stops them."
+            "Known causes of game crashes and stutter are already switched off for you."
+          ];
         }
       )
     ];

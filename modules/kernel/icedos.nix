@@ -39,6 +39,12 @@
             echo advise > /sys/kernel/mm/transparent_hugepage/shmem_enabled
             echo 0 > /sys/kernel/mm/transparent_hugepage/khugepaged/defrag
           '';
+
+          icedos.system.tips.list = [
+            "Memory is handed out in bigger blocks, so heavy apps and games run faster."
+            "The system skips background memory tidying that can cause short freezes."
+            "When memory gets tight, apps wait less for their turn."
+          ];
         }
       )
     ];

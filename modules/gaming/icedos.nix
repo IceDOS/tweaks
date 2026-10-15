@@ -16,7 +16,7 @@
 
             kernel.sysctl = {
               "kernel.split_lock_mitigate" = 0; # Fixes some games from stuttering
-              "vm.max_map_count" = 1048576; # Fixes crashes or start-up issues for games
+              "vm.max_map_count" = 2147483642; # SteamOS/Bazzite standard to prevent game map exhaustion
             };
           };
 

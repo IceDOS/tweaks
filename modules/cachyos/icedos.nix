@@ -130,8 +130,6 @@
             rulesProvider = pkgs.ananicy-rules-cachyos;
           };
 
-          services.irqbalance.enable = true;
-
           systemd.settings.Manager = {
             DefaultTimeoutStartSec = "15s";
             DefaultTimeoutStopSec = "10s";

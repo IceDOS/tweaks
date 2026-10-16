@@ -16,11 +16,11 @@
   its path or permission to `git clone` it — don't guess or clone unprompted.
 
 ## Purpose
-System-wide performance and behavior tweaks — the optional "make it faster / gaming"
+System-wide performance and behavior tweaks — the optional "make it faster"
 layer that sits on top of `hardware`.
 
 ## Layout
-`modules/{cachyos,dmem,gaming,kernel}/{icedos.nix,config.toml}`; `flake.nix` exposes
+`modules/{cachyos,dmem,kernel}/{icedos.nix,config.toml}`; `flake.nix` exposes
 them via `icedosLib.scanModules { path = ./modules; filename = "icedos.nix"; }`.
 
 ## Module shape here
@@ -32,7 +32,7 @@ checkout (`path:/abs/path/to/tweaks`), then `icedos rebuild --build` (no activat
 
 ## Notable modules / gotchas
 - `cachyos` — CachyOS-style tunables (`useAdios` I/O scheduler, CachyOS zram profile).
-- `gaming` — gaming-oriented sysctls/limits.
+- Gaming sysctls and limits moved to the gaming repo as its `tweaks` module.
 - `kernel` — kernel-level tweaks (distinct from `hardware/kernel`, which selects the
   kernel itself).
 - `dmem` — memory tweaks.

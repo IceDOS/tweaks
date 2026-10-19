@@ -1,4 +1,4 @@
-{ ... }:
+{ icedosLib, ... }:
 
 {
   outputs.nixosModules =
@@ -17,7 +17,7 @@
           inherit (lib) mkIf versionAtLeast;
 
           dmemSupported = versionAtLeast version "7.0";
-          dmemcg-booster = (pkgs.extend inputs.jovian.overlays.default).dmemcg-booster;
+          dmemcg-booster = icedosLib.jovian.getPackage { inherit inputs pkgs; } "dmemcg-booster";
         in
         mkIf dmemSupported {
           environment.systemPackages = [ dmemcg-booster ];

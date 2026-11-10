@@ -5,12 +5,10 @@
     { repoUrl, ... }:
     [
       (
-        { config, lib, ... }:
+        { config, ... }:
 
         let
-          inherit (config) boot icedos;
-          inherit (boot.kernelPackages.kernel) version;
-          inherit (lib) versionAtLeast;
+          inherit (config) icedos;
 
           useCachyosZramProfile =
             icedosLib.hasModule {
@@ -18,8 +16,6 @@
               name = "cachyos";
             }
             && (icedos.tweaks.cachyos.useCachyosZramProfile or false);
-
-          pageClusterKey = if versionAtLeast version "6.19" then "vm.page-cluster" else "vm.page_cluster";
         in
         {
           boot = {
@@ -28,7 +24,7 @@
             ];
 
             kernel.sysctl = {
-              ${pageClusterKey} = if useCachyosZramProfile then 0 else 1;
+              "vm.page-cluster" = if useCachyosZramProfile then 0 else 1;
 
               "vm.compaction_proactiveness" = 0;
               "vm.page_lock_unfairness" = 1;

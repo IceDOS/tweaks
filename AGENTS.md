@@ -20,7 +20,7 @@ System-wide performance and behavior tweaks — the optional "make it faster"
 layer that sits on top of `hardware`.
 
 ## Layout
-`modules/{cachyos,dmem,kernel}/{icedos.nix,config.toml}`; `flake.nix` exposes
+`modules/{cachyos,dmem,gc,kernel}/{icedos.nix,config.toml}`; `flake.nix` exposes
 them via `icedosLib.scanModules { path = ./modules; filename = "icedos.nix"; }`.
 
 ## Module shape here
@@ -36,3 +36,9 @@ checkout (`path:/abs/path/to/tweaks`), then `icedos rebuild --build` (no activat
 - `kernel` — kernel-level tweaks (distinct from `hardware/kernel`, which selects the
   kernel itself).
 - `dmem` — memory tweaks.
+- `gc` — adds a core `rootPostGc` hook that removes old systemd core dumps
+  (`/var/lib/systemd/coredump`, default older than 3 days) and archived journal files
+  (`/var/log/journal/*/`, names with `@` or ending `.journal~`, default older than 14
+  days) during `icedos gc` and the `nh-clean` timer. Active journals never match.
+  `coredumpctl list` keeps listing removed dumps as missing. Size caps stay with
+  journald (`SystemMaxUse` in `cachyos`).

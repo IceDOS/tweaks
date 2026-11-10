@@ -1,0 +1,7 @@
+[icedos.tweaks.gc.coredump]
+enable = true
+days = 3 # 0 = remove all core dumps
+
+[icedos.tweaks.gc.journal]
+enable = true
+days = 14 # 0 = remove all archived journals; active ones always stay
